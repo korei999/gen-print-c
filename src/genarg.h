@@ -3,9 +3,9 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#define __GA_NEW(TAG, VAL) (GenArg){.tag = TAG, .data.TAG = {VAL}}
+#define GA_NEW(TAG, VAL) (GenArg){.tag = TAG, .data.TAG = {VAL}}
 
-#define __GA(A)                                                                                                        \
+#define GA(A)                                                                                                          \
     _Generic((A),                                                                                                      \
         char: GenArgChar,                                                                                              \
         int: GenArgInt,                                                                                                \
@@ -17,28 +17,28 @@
         void*: GenArgPVoid)(A)
 
 /* dumbest shit but works */
-#define __ADD_GA1(x, ...) __GA(x)
-#define __ADD_GA2(x, ...) __GA(x), __ADD_GA1(__VA_ARGS__)
-#define __ADD_GA3(x, ...) __GA(x), __ADD_GA2(__VA_ARGS__)
-#define __ADD_GA4(x, ...) __GA(x), __ADD_GA3(__VA_ARGS__)
-#define __ADD_GA5(x, ...) __GA(x), __ADD_GA4(__VA_ARGS__)
-#define __ADD_GA6(x, ...) __GA(x), __ADD_GA5(__VA_ARGS__)
-#define __ADD_GA7(x, ...) __GA(x), __ADD_GA6(__VA_ARGS__)
-#define __ADD_GA8(x, ...) __GA(x), __ADD_GA7(__VA_ARGS__)
-#define __ADD_GA9(x, ...) __GA(x), __ADD_GA8(__VA_ARGS__)
-#define __ADD_GA10(x, ...) __GA(x), __ADD_GA9(__VA_ARGS__)
-#define __ADD_GA11(x, ...) __GA(x), __ADD_GA10(__VA_ARGS__)
-#define __ADD_GA12(x, ...) __GA(x), __ADD_GA11(__VA_ARGS__)
-#define __ADD_GA13(x, ...) __GA(x), __ADD_GA12(__VA_ARGS__)
-#define __ADD_GA14(x, ...) __GA(x), __ADD_GA13(__VA_ARGS__)
-#define __ADD_GA15(x, ...) __GA(x), __ADD_GA14(__VA_ARGS__)
-#define __ADD_GA16(x, ...) __GA(x), __ADD_GA15(__VA_ARGS__)
-#define __ADD_GA17(x, ...) __GA(x), __ADD_GA16(__VA_ARGS__)
-#define __ADD_GA18(x, ...) __GA(x), __ADD_GA17(__VA_ARGS__)
-#define __ADD_GA19(x, ...) __GA(x), __ADD_GA18(__VA_ARGS__)
-#define __ADD_GA20(x, ...) __GA(x), __ADD_GA19(__VA_ARGS__)
+#define __ADD_GA1(x, ...) GA(x)
+#define __ADD_GA2(x, ...) GA(x), __ADD_GA1(__VA_ARGS__)
+#define __ADD_GA3(x, ...) GA(x), __ADD_GA2(__VA_ARGS__)
+#define __ADD_GA4(x, ...) GA(x), __ADD_GA3(__VA_ARGS__)
+#define __ADD_GA5(x, ...) GA(x), __ADD_GA4(__VA_ARGS__)
+#define __ADD_GA6(x, ...) GA(x), __ADD_GA5(__VA_ARGS__)
+#define __ADD_GA7(x, ...) GA(x), __ADD_GA6(__VA_ARGS__)
+#define __ADD_GA8(x, ...) GA(x), __ADD_GA7(__VA_ARGS__)
+#define __ADD_GA9(x, ...) GA(x), __ADD_GA8(__VA_ARGS__)
+#define __ADD_GA10(x, ...) GA(x), __ADD_GA9(__VA_ARGS__)
+#define __ADD_GA11(x, ...) GA(x), __ADD_GA10(__VA_ARGS__)
+#define __ADD_GA12(x, ...) GA(x), __ADD_GA11(__VA_ARGS__)
+#define __ADD_GA13(x, ...) GA(x), __ADD_GA12(__VA_ARGS__)
+#define __ADD_GA14(x, ...) GA(x), __ADD_GA13(__VA_ARGS__)
+#define __ADD_GA15(x, ...) GA(x), __ADD_GA14(__VA_ARGS__)
+#define __ADD_GA16(x, ...) GA(x), __ADD_GA15(__VA_ARGS__)
+#define __ADD_GA17(x, ...) GA(x), __ADD_GA16(__VA_ARGS__)
+#define __ADD_GA18(x, ...) GA(x), __ADD_GA17(__VA_ARGS__)
+#define __ADD_GA19(x, ...) GA(x), __ADD_GA18(__VA_ARGS__)
+#define __ADD_GA20(x, ...) GA(x), __ADD_GA19(__VA_ARGS__)
 #define __ADD_GA(i, ...) __ADD_GA##i(__VA_ARGS__)
-#define GARGS(count, ...) __ADD_GA(count, __VA_ARGS__)
+#define GAS(count, ...) __ADD_GA(count, __VA_ARGS__)
 
 typedef struct GenArg
 {
@@ -69,49 +69,49 @@ typedef struct GenArg
 static inline GenArg
 GenArgChar(char c)
 {
-    return __GA_NEW(GA_CHAR, c);
+    return GA_NEW(GA_CHAR, c);
 }
 
 static inline GenArg
 GenArgInt(int i)
 {
-    return __GA_NEW(GA_INT, i);
+    return GA_NEW(GA_INT, i);
 }
 
 static inline GenArg
 GenArgLong(long l)
 {
-    return __GA_NEW(GA_LONG, l);
+    return GA_NEW(GA_LONG, l);
 }
 
 static inline GenArg
 GenArgSizeT(size_t s)
 {
-    return __GA_NEW(GA_SIZE_T, s);
+    return GA_NEW(GA_SIZE_T, s);
 }
 
 static inline GenArg
 GenArgFloat(float f)
 {
-    return __GA_NEW(GA_FLOAT, f);
+    return GA_NEW(GA_FLOAT, f);
 }
 
 static inline GenArg
 GenArgDouble(double d)
 {
-    return __GA_NEW(GA_DOUBLE, d);
+    return GA_NEW(GA_DOUBLE, d);
 }
 
 static inline GenArg
 GenArgPChar(char* p)
 {
-    return __GA_NEW(GA_PCHAR, p);
+    return GA_NEW(GA_PCHAR, p);
 }
 
 static inline GenArg
 GenArgPVoid(void* v)
 {
-    return __GA_NEW(GA_PVOID, v);
+    return GA_NEW(GA_PVOID, v);
 }
 
 static inline void
