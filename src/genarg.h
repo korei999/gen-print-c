@@ -3,22 +3,9 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#define GA_NEW(TAG, VAL) (GenArg){.tag = TAG, .data.TAG = {VAL}}
-
-#define GA(A)                                                                                                          \
-    _Generic((A),                                                                                                      \
-        char: GenArgChar,                                                                                              \
-        int: GenArgInt,                                                                                                \
-        unsigned: GenArgUnsigned,                                                                                      \
-        long: GenArgLong,                                                                                              \
-        size_t: GenArgSizeT,                                                                                           \
-        float: GenArgFloat,                                                                                            \
-        double: GenArgDouble,                                                                                          \
-        char*: GenArgPChar,                                                                                            \
-        void*: GenArgPVoid)(A)
-
-/* dumbest shit but works */
-/* up to 20 arguments */
+/* dumbest shit but works
+ * up to 20 arguments
+ * 0 args won't work, at least i don't know how to make it work */
 #define __ADD_GA1(x, ...) GA(x)
 #define __ADD_GA2(x, ...) GA(x), __ADD_GA1(__VA_ARGS__)
 #define __ADD_GA3(x, ...) GA(x), __ADD_GA2(__VA_ARGS__)
@@ -47,8 +34,21 @@
 #define VA_NARGS_IMPL(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, N, ...) N
 #define VA_NARGS(...) VA_NARGS_IMPL(__VA_ARGS__, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
 
-#define COUT(FMT, ...) fprintg(stdout, FMT, GAS(VA_NARGS(__VA_ARGS__), __VA_ARGS__))
-#define CERR(FMT, ...) fprintg(stderr, FMT, GAS(VA_NARGS(__VA_ARGS__), __VA_ARGS__))
+#define GA_NEW(TAG, VAL) (GenArg){.tag = TAG, .data.TAG = {VAL}}
+
+#define GA(A)                                                                                                          \
+    _Generic((A),                                                                                                      \
+        char: GenArgChar,                                                                                              \
+        int: GenArgInt,                                                                                                \
+        unsigned: GenArgUnsigned,                                                                                      \
+        long: GenArgLong,                                                                                              \
+        size_t: GenArgSizeT,                                                                                           \
+        float: GenArgFloat,                                                                                            \
+        double: GenArgDouble,                                                                                          \
+        char*: GenArgPChar,                                                                                            \
+        const char*: GenArgCPChar,                                                                                     \
+        void*: GenArgPVoid)(A)
+
 
 typedef struct GenArg
 {
@@ -62,6 +62,7 @@ typedef struct GenArg
         GA_FLOAT,
         GA_DOUBLE,
         GA_PCHAR,
+        GA_CPCHAR,
         GA_PVOID
     } tag;
     union
@@ -74,6 +75,7 @@ typedef struct GenArg
         struct GA_FLOAT { float f; } GA_FLOAT;
         struct GA_DOUBLE { double d; } GA_DOUBLE;
         struct GA_PCHAR { char* p; } GA_PCHAR;
+        struct GA_CPCHAR { const char* cp; } GA_CPCHAR;
         struct GA_PVOID { char* v; } GA_PVOID;
     } data;
 } GenArg;
@@ -127,6 +129,12 @@ GenArgPChar(char* p)
 }
 
 static inline GenArg
+GenArgCPChar(const char* cp)
+{
+    return GA_NEW(GA_CPCHAR, cp);
+}
+
+static inline GenArg
 GenArgPVoid(void* v)
 {
     return GA_NEW(GA_PVOID, v);
@@ -147,7 +155,7 @@ fprintg(FILE* fp, char* fmt, ...)
             switch (ga.tag)
             {
                 default:
-                    fprintf(fp, "unhandled type");
+                    fprintf(fp, "\"unhandled type\"");
                     break;
 
                 case GA_CHAR:
@@ -180,6 +188,10 @@ fprintg(FILE* fp, char* fmt, ...)
 
                 case GA_PCHAR:
                     fprintf(fp, "%s", ga.data.GA_PCHAR.p);
+                    break;
+
+                case GA_CPCHAR:
+                    fprintf(fp, "%s", ga.data.GA_CPCHAR.cp);
                     break;
 
                 case GA_PVOID:

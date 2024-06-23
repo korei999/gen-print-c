@@ -1,4 +1,4 @@
-#include "genarg.h"
+#include "logs.h"
 
 int
 main()
