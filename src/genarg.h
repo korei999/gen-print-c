@@ -115,7 +115,7 @@ GenArgPVoid(void* v)
 }
 
 static inline void
-printg(char* fmt, ...)
+fprintg(FILE* fp, char* fmt, ...)
 {
     va_list args;
     va_start(args, fmt);
@@ -129,46 +129,46 @@ printg(char* fmt, ...)
             switch (ga.tag)
             {
                 default:
-                    printf("unhandled type");
+                    fprintf(fp, "unhandled type");
                     break;
 
                 case GA_CHAR:
-                    printf("%c", ga.data.GA_CHAR.c);
+                    fprintf(fp, "%c", ga.data.GA_CHAR.c);
                     break;
 
                 case GA_INT:
-                    printf("%d", ga.data.GA_INT.i);
+                    fprintf(fp, "%d", ga.data.GA_INT.i);
                     break;
 
                 case GA_LONG:
-                    printf("%ld", ga.data.GA_LONG.l);
+                    fprintf(fp, "%ld", ga.data.GA_LONG.l);
                     break;
 
                 case GA_SIZE_T:
-                    printf("%zu", ga.data.GA_SIZE_T.s);
+                    fprintf(fp, "%zu", ga.data.GA_SIZE_T.s);
                     break;
 
                 case GA_FLOAT:
-                    printf("%f", ga.data.GA_FLOAT.f);
+                    fprintf(fp, "%f", ga.data.GA_FLOAT.f);
                     break;
 
                 case GA_DOUBLE:
-                    printf("%lf", ga.data.GA_DOUBLE.d);
+                    fprintf(fp, "%lf", ga.data.GA_DOUBLE.d);
                     break;
 
                 case GA_PCHAR:
-                    printf("%s", ga.data.GA_PCHAR.p);
+                    fprintf(fp, "%s", ga.data.GA_PCHAR.p);
                     break;
 
                 case GA_PVOID:
-                    printf("%p", ga.data.GA_PVOID.v);
+                    fprintf(fp, "%p", ga.data.GA_PVOID.v);
                     break;
             }
             pos++;
         }
         else
         {
-            putchar(fmt[pos]);
+            fputc(fmt[pos], fp);
         }
     }
 
