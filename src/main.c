@@ -12,6 +12,11 @@ main()
     /* or like this */
     COUT("{}, {}, {}, {}, {}\n", 1, 2.0f, "three", 4u, 5.0);
 
-    /* gotta put something if no args */
-    COUT("no args\n", 0);
+    COUT("{}, {}, {}\n", 1, 2, "three");
+    CERR("asdf\n");
+    CERR("any arg: {}, {}, {}\n", "any", (void*)0xa68, 123UL);
+
+    LOG_OK("no args: works\n");
+    const char* works = "works";
+    LOG_OK("{} {}\n", "still", works);
 }
