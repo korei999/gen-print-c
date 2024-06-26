@@ -19,4 +19,7 @@ main()
     LOG_OK("no args: works\n");
     const char* works = "works";
     LOG_OK("{} {}\n", "still", works);
+
+    const char* what = "what?";
+    COUT("{}, {}, {}, {}, {}\n", 1, 2.2, 3.3f, "four", what);
 }
